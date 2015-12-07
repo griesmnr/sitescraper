@@ -5,13 +5,12 @@ package com.company;
  */
 public class TagFilterer {
     private boolean shouldRecord;
-    private boolean shouldSkip;
     private boolean shouldSkipThenRecord;
     private boolean shouldDelimit;
 
     public TagFilterer(){
         this.shouldRecord = true;
-        this.shouldSkip = false;
+        this.shouldSkipThenRecord = false;
         this.shouldDelimit = false;
     }
 
@@ -19,9 +18,6 @@ public class TagFilterer {
         if (this.getShouldSkipThenRecord()){
             this.setShouldSkipThenRecord(false);
             this.setShouldRecord(true);
-        }
-        if (this.getShouldSkip()){
-            this.setShouldSkip(false);
         }
         if (this.getShouldDelimit()){
             this.setShouldDelimit(false);
@@ -32,9 +28,7 @@ public class TagFilterer {
         } else if (c == '>') {
             this.setShouldSkipThenRecord(true);
         }
-
     }
-
 
     public boolean getShouldDelimit() {
         return shouldDelimit;
@@ -42,10 +36,6 @@ public class TagFilterer {
 
     public boolean getShouldRecord() {
         return shouldRecord;
-    }
-
-    private boolean getShouldSkip() {
-        return shouldSkip;
     }
 
     private boolean getShouldSkipThenRecord() {
@@ -60,15 +50,11 @@ public class TagFilterer {
         this.shouldRecord = shouldRecord;
     }
 
-    private void setShouldSkip(boolean shouldSkip) {
-        this.shouldSkip = shouldSkip;
-    }
-
     private void setShouldSkipThenRecord(boolean shouldSkipThenRecord) {
         this.shouldSkipThenRecord = shouldSkipThenRecord;
     }
 
     public boolean shouldRecordChar(){
-        return getShouldRecord() && !getShouldSkip() && !getShouldSkipThenRecord();
+        return getShouldRecord() && !getShouldSkipThenRecord();
     }
 }
