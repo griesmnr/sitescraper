@@ -31,9 +31,6 @@ public class TagFilterer {
             this.setShouldDelimit(true);
         } else if (c == '>') {
             this.setShouldSkipThenRecord(true);
-        } else if (!Character.isLetter(c)){
-            this.setShouldSkip(true);
-            this.setShouldDelimit(true);
         }
 
     }
