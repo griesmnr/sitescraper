@@ -1,7 +1,8 @@
 package com.company;
 
 /**
- * Created by nicoleg on 12/6/15.
+ * Responsible for telling users when to record and delimit their new string to
+ * get HTML without tags.
  */
 public class TagFilterer {
     private boolean shouldRecord;

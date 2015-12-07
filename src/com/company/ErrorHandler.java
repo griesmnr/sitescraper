@@ -1,7 +1,7 @@
 package com.company;
 
 /**
- * Created by nicoleg on 12/6/15.
+ * CResponsible for handling errors throughout the application.
  */
 public class ErrorHandler {
     private Exception exception;
@@ -14,7 +14,7 @@ public class ErrorHandler {
     }
 
     public void throwError(){
-        System.out.println(this.message + " ");
         exception.printStackTrace();
+        System.out.println(this.message);
     }
 }

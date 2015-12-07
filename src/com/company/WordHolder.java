@@ -4,7 +4,7 @@ package com.company;
 import java.util.HashMap;
 
 /**
- * Created by nicoleg on 12/6/15.
+ * Responsible for sanitizing words, and producing data structure with words in it.
  */
 public class WordHolder {
     private HashMap<String, Integer> wordTracker;
@@ -43,7 +43,7 @@ public class WordHolder {
         if (firstAlphanumeric !=null && lastAlphanumeric != null){
             return word.substring(firstAlphanumeric, lastAlphanumeric);
         }
-        return null; //no start and end to alphanumerics- word should be discarded.
+        return null; //no start/end alphanumeric characters found, discard non-word
     }
 
     public HashMap<String, Integer> getWordsAndCounts(){
