@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -24,6 +28,7 @@ public class PageScraper {
     private Protocol protocol;
     private StringBuilder unfilteredSiteText;
     private StringBuilder filteredSiteText;
+    private WordHolder wordHolder;
 
 
     public PageScraper(String urlString){
@@ -152,12 +157,66 @@ public class PageScraper {
 
    private void breakIntoWords(){
         StringTokenizer st = new StringTokenizer(filteredSiteText.toString(), " ");
-        WordHolder wordHolder = new WordHolder();
+        wordHolder = new WordHolder();
         while (st.hasMoreTokens()){
             wordHolder.processWord(st.nextToken());
         }
-        //TODO remove
+
         System.out.println(wordHolder.getWordsAndCounts().toString());
+    }
+
+    private void commitToDatabase(){
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:scraper.db");
+            stmt = c.createStatement();
+
+            //get all words into the database
+            StringBuilder words = new StringBuilder();
+            HashMap<String, Integer> wordsAndCounts = wordHolder.getWordsAndCounts();
+            Iterator<String> iterator = wordsAndCounts.keySet().iterator();
+            String currentWord;
+            while (iterator.hasNext()){
+
+                currentWord = "(\"" + iterator.next().replace("\"", "`")+ "\")";
+                if (iterator.hasNext()){
+                    currentWord = currentWord + ",";
+                }
+                words.append(currentWord);
+            }
+
+            String sql = "INSERT INTO word (name)" +
+                    "VALUES " + words.toString();
+
+            stmt.executeUpdate(sql);
+
+            //get word ids and apply counts
+            sql = "SELECT * FROM word";
+            stmt.execute(sql);
+            ResultSet rs = stmt.getResultSet();
+
+            StringBuilder counts = new StringBuilder();
+            while (rs.next()){
+                if (!rs.isFirst()){
+                    counts.append(",");
+                }
+                counts.append("(" + rs.getInt(1) + ","
+                    +wordsAndCounts.get(rs.getString(2).replace("`", "\"")) + ")");
+            }
+            sql = "INSERT INTO word_count (word_id, count) VALUES "
+                +counts.toString();
+
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+
     }
 
     public void scrapePage(){
@@ -169,6 +228,7 @@ public class PageScraper {
         this.getAllPageDataAsString();
         this.stripOutTags();
         this.breakIntoWords();
+        this.commitToDatabase();
     }
 
 
