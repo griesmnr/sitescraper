@@ -1,3 +1,6 @@
+How to run
+Go to the out/artifacts/PageScraper_jar directory and type java -jar PageScraper.jar.
+Java 8 is a dependency, but all other dependencies should be self-contained.
 
 Tradeoffs, major decisions
 1) Sifting through the HTML.
