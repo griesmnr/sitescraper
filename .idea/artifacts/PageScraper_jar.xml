@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PageScraper:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PageScraper_jar</output-path>
+    <root id="archive" name="PageScraper.jar">
+      <element id="module-output" name="PageScraper" />
+      <element id="extracted-dir" path="$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.8.9.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
